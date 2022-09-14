@@ -28,15 +28,41 @@ def signIn(max_attempt):
     attempt = 0
     while attempt < max_attempt:
         attempt += 1
-        username = input("Username?")
-        password = input("Password?")
+        username = input("Username ?")
+        password = input("Password ?")
         if password in d.keys() and d[password] == username :
             print("You are logged in !")
-            return True
+            return username
         else:
             print("Wrong username or password! Try again !")
 
-    return False
+    return None
+
+def isPasswordValid(password):
+    
+    return True
+
+def changePassword(username):
+    old_password = ""
+    for key, value in d.items():
+        if username == value:
+            old_password = key
+            break
+
+    new_password = "0"
+    confirm_password = "1"
+
+    while not (new_password == confirm_password) :
+        new_password = input("New password ? ")
+        confirm_password = input("Confirm password ? ")
+        if new_password == confirm_password :
+            d[new_password] = d.pop(old_password)
+            break
+
+    file = open("usernames.txt","w")
+    for key, value in d.items():
+        file.writelines(value + "," + key + ",\n")
+    file.close()
 
 def signUp():
     first_name = input("First Name ? ")
@@ -52,7 +78,7 @@ def signUp():
     password = input("Password : ")
 
     file = open("usernames.txt","a")
-    file.writelines("\n" + username.lower() + "," + password + ",\n")
+    file.writelines(username.lower() + "," + password + ",\n")
     file.close()
 
 new_user = input("New User (0) or Existing User (1) : ")
@@ -60,8 +86,12 @@ new_user = input("New User (0) or Existing User (1) : ")
 if new_user == "0":
     signUp()
 else:
-    if not signIn(MAX_ATTEMPT):
+    username = signIn(MAX_ATTEMPT)
+    if username == None:
         print("Try again later ! ")
+    else:
+        print("Change password now ")
+        changePassword(username)
 
 #if not signIn(MAX_ATTEMPT):
 #    print("Try again later !")
