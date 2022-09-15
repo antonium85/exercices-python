@@ -1,5 +1,7 @@
 #My Login Script - www.101computing.net/my-login-script
 
+import string
+
 USERNAME="admin"
 PASSWORD="p4$$W0rd"
 MAX_ATTEMPT = 3
@@ -24,12 +26,12 @@ print(d)
 #Closing thte text file
 file.close()
 
-def signIn(max_attempt):
+def sign_in(max_attempt):
     attempt = 0
     while attempt < max_attempt:
         attempt += 1
-        username = input("Username ?")
-        password = input("Password ?")
+        username = input("Username ? ")
+        password = input("Password ? ")
         if password in d.keys() and d[password] == username :
             print("You are logged in !")
             return username
@@ -38,9 +40,19 @@ def signIn(max_attempt):
 
     return None
 
-def isPasswordValid(password):
-    
-    return True
+"""
+The password has to be at least 8 characters long,
+The password has to include uppercase letters and lowercase letters,
+The password has to letters and numbers,
+The password has to include at least one punctuation sign.
+"""
+def is_strong_password(password):
+    has_punctuation_sign = False
+    for i in password:
+        if i in string.punctuation : 
+            has_punctuation_sign = True
+            break
+    return has_punctuation_sign and not password.islower() and not password.isdigit() and not len(password) < 8
 
 def changePassword(username):
     old_password = ""
@@ -51,11 +63,14 @@ def changePassword(username):
 
     new_password = "0"
     confirm_password = "1"
+    strong_password = False
 
-    while not (new_password == confirm_password) :
+    while not (new_password == confirm_password) or not strong_password:
         new_password = input("New password ? ")
         confirm_password = input("Confirm password ? ")
-        if new_password == confirm_password :
+        strong_password = is_strong_password(new_password)
+
+        if new_password == confirm_password and strong_password :
             d[new_password] = d.pop(old_password)
             break
 
@@ -64,7 +79,7 @@ def changePassword(username):
         file.writelines(value + "," + key + ",\n")
     file.close()
 
-def signUp():
+def sign_up():
     first_name = input("First Name ? ")
     last_name = input("Last Name ? ")
 
@@ -76,6 +91,8 @@ def signUp():
 
     print("Your username : " + username)
     password = input("Password : ")
+    while not is_strong_password(password):
+        password = input("Password : ")
 
     file = open("usernames.txt","a")
     file.writelines(username.lower() + "," + password + ",\n")
@@ -84,14 +101,14 @@ def signUp():
 new_user = input("New User (0) or Existing User (1) : ")
 
 if new_user == "0":
-    signUp()
+    sign_up()
 else:
-    username = signIn(MAX_ATTEMPT)
+    username = sign_in(MAX_ATTEMPT)
     if username == None:
         print("Try again later ! ")
     else:
         print("Change password now ")
         changePassword(username)
 
-#if not signIn(MAX_ATTEMPT):
+#if not sign_in(MAX_ATTEMPT):
 #    print("Try again later !")
