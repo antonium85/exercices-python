@@ -18,7 +18,7 @@ def decrypt(cyphertext, key):
 
 #Main program starts here...
 #Input...
-cyphertext = input("Enter a message to encrypt (cyphertext)")
+plaintext = input("Enter a message to encrypt (plaintext)")
 key = int(input("Input a key as a number between 1 and 10"))
 while not (key>=1 and key<=10):
   print("Invalid key, try again!")
@@ -31,10 +31,11 @@ print("Encrypting plaintext...")
 time.sleep(1)
 print("...")
 time.sleep(1)
-plaintext = decrypt(cyphertext, key)
+cyphertext = encrypt(plaintext, key)
 
 #Output...
 print("Ciphertext:")
-print(ciphertext)
+print(cyphertext)
+
 print("Plaintext:")
-print(plaintext)
+print(decrypt(cyphertext,key))
