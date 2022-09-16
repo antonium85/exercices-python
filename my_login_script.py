@@ -37,7 +37,6 @@ class Utils:
                 str = line[:len(line)-2]
                 username, password = str.split(",")
                 d[password] = username
-                print(f'{username} and {password}')
         file.close()
         return d
 
@@ -102,10 +101,13 @@ class LoginScript:
 
     def __del__(self):
         self.data.clear()
-        print("See you again !!! ")
+        print("#####    See you again   #####")
 
     def get_data(self):
         return self.data
+
+    def is_logged_in(self):
+        return self._username != ""
 
     def sign_up(self):
         first_name = input("First Name ? ")
@@ -137,7 +139,7 @@ class LoginScript:
 
             if Utils.simple_captcha() :
                 if password in self.data.keys() and self.data[password] == username :
-                    print("You are logged in !")
+                    print("#####    You are logged in !     #####\n")
                     self._username = username
                     return True
                 else:
@@ -169,12 +171,13 @@ class LoginScript:
                     break
         Utils.rewrite_data_file(self.data,"usernames.txt")
 
-print("#####################")
-print("#    Login Screen   #")
-print("#####################")
-print("1 : Sign Up - 2 : Login - 3 : Change password - 4 : Logout") 
+print("##########################################################")
+print("#                        Login Screen                    #")
+print("##########################################################")
+print("1 : Sign Up - 2 : Login - 3 : Change password - 4 : Logout\n") 
 
 action = input("What do you want to do now ? ")
+
 login = LoginScript()
 #print(login.get_data())
 while not action == "4" :
@@ -184,8 +187,15 @@ while not action == "4" :
         if not login.sign_in(MAX_ATTEMPT) :
             print("Try again later ! ")
     elif action == "3":
-        print("Change password now ")
-        login.changePassword()
+        if login.is_logged_in():
+            print("######   Change password now    ######")
+            login.changePassword()
+        else:
+            print("#####    You need to log in first    #####")
+    else:
+        print("#####    Invalid action      #####")
+
+    print("1 : Sign Up - 2 : Login - 3 : Change password - 4 : Logout\n")
     action = input("What do you want to do now ? ")
 del login
 
