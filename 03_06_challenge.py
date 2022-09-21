@@ -1,3 +1,5 @@
+# exercices from Python Essential Training Linkedin
+
 import os
 import time
 import math
